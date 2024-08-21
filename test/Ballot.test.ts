@@ -24,8 +24,8 @@ describe("Ballot", async () => {
     it("has the provided proposals", async () => {
 			const {ballotContract} = await loadFixture(deployContractFixture);
 			for (let i = 0; i < PROPOSALS.length; i++) {
-				const proposal = await ballotContract.read.proposals([]);
-				expect(proposal).to.equal(PROPOSALS[i]);
+				const proposal = await ballotContract.read.proposals([BigInt(i)]);
+				expect(hexToString(proposal[0], {size: 32})).to.equal(PROPOSALS[i]);
 			}
     });
 
