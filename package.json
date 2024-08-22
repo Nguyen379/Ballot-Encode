@@ -11,6 +11,10 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
-    "hardhat": "^2.22.8"
+    "hardhat": "^2.22.9",
+    "mocha": "^10.7.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }

@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { toHex, hexToString } from "viem";
 import { viem } from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+// import "hardhat/console.sol";
 
 const PROPOSALS = ["Proposal 1", "Proposal 2", "Proposal 3"];
 
@@ -31,15 +32,21 @@ describe("Ballot", async () => {
 
     it("has zero votes for all proposals", async () => {
 			const {ballotContract} = await loadFixture(deployContractFixture);
-
+      for (let index = 0; index < PROPOSALS.length; index++) {
+        const proposal = await ballotContract.read.proposals([BigInt(index)]);
+        expect(proposal[1]).to.eq(0n);
+      }
     });
     it("sets the deployer address as chairperson", async () => {
-      // TODO
-      throw Error("Not implemented");
+      const {ballotContract, owner} = await loadFixture(deployContractFixture);
+      const chairperson = await ballotContract.read.chairperson();
+      expect(chairperson.toLowerCase()).to.equal(owner.account.address);
     });
     it("sets the voting weight for the chairperson as 1", async () => {
-      // TODO
-      throw Error("Not implemented");
+      const {ballotContract, owner} = await loadFixture(deployContractFixture);
+      const chairperson = await ballotContract.read.chairperson();
+      const chairpersonVoter = await ballotContract.read.voters([chairperson]);
+      expect(chairpersonVoter[0]).to.eq(1n);
     });
   });
 
