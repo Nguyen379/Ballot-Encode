@@ -1,7 +1,7 @@
 import { viem } from "hardhat";
 import { toHex, hexToString, formatEther } from "viem";
 
-const PROPOSALS = ["Proposal 1", "Proposal 2", "Proposal 3"];
+const PROPOSALS = ["Proposal1", "Proposal2", "Proposal3"];
 
 async function main() {
 	const publicClient = await viem.getPublicClient();
