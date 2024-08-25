@@ -8,6 +8,8 @@ import { toHex, hexToString, parseEther } from "viem";
 import * as readline from 'readline';
 
 // npx ts-node --files ./scripts/CastVote.ts ADDRESS INDEX
+// https://sepolia.etherscan.io/tx/0x40574c6c05ad9f418e35e72aa062922c3b571448a057c2af3f832a9d15e7f4ad
+
 dotenv.config();
 
 const providerApiKey = process.env.ALCHEMY_API_KEY || "";

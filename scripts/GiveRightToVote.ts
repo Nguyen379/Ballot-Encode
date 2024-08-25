@@ -7,7 +7,8 @@ import { abi, bytecode } from "../artifacts/contracts/Ballot.sol/Ballot.json";
 import { toHex, hexToString, parseEther } from "viem";
 import * as readline from 'readline';
 
-// npx ts-node --files ./scripts/CastVote.ts ADDRESS_GIVING_RIGHT ADDRESS_RECEIVING_RIGHT
+// npx ts-node --files ./scripts/GiveRightToVote.ts CONTRACT ADDRESS
+// https://sepolia.etherscan.io/tx/0x2b44e8f05d1d8364123e4db8d9f9b6692950ea6722cee9fb991cdf782a63b787
 dotenv.config();
 
 const providerApiKey = process.env.ALCHEMY_API_KEY || "";
@@ -30,16 +31,16 @@ async function main() {
 
 	// Receiving parameters
 	const parameters = process.argv.slice(2);
-  if (!parameters || parameters.length < 2)
+  if (!parameters || parameters.length < 1)
     throw new Error("Parameters not provided");
   const contractAddress = parameters[0] as `0x${string}`;
   if (!contractAddress) throw new Error("Contract address not provided");
   if (!/^0x[a-fA-F0-9]{40}$/.test(contractAddress))
     throw new Error("Invalid contract address");
-  const proposalIndex = parameters[1];
-  if (isNaN(Number(proposalIndex))) throw new Error("Invalid proposal index");
 
 	// Creating CHAIRPERSON wallet client
+  let chairpersonPrivateKey = await question("Chairperson, please enter your private key: ");
+  chairpersonPrivateKey = chairpersonPrivateKey.startsWith('0x') ? chairpersonPrivateKey.slice(2) : chairpersonPrivateKey;
   const account = privateKeyToAccount(`0x${chairpersonPrivateKey}`);
   const deployer = createWalletClient({
     account,
@@ -47,14 +48,18 @@ async function main() {
     transport: http(`https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`),
   });
 
-	// Sending transaction on user confirmation
-  const answer = await question("Confirm? (Y/n): ");
+	// Getting address of the voter receiving right
+	let voterAddress = await question("Enter the address of the voter receiving right: ");
+  voterAddress = voterAddress.startsWith('0x') ? voterAddress : `0x${voterAddress}`;
+
+	// Give voting right to voterAddress
+  const answer = await question("Confirm giving right to vote? (Y/n): ");
   if (answer.toString().trim().toLowerCase() != "n") {
     const hash = await deployer.writeContract({
       address: contractAddress,
       abi,
-      functionName: "vote",
-      args: [BigInt(proposalIndex)],
+      functionName: "giveRightToVote",
+      args: [voterAddress],
     });
     console.log("Transaction hash:", hash);
     console.log("Waiting for confirmations...");
