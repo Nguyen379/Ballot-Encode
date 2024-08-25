@@ -8,8 +8,7 @@ import { toHex, hexToString, parseEther } from "viem";
 import * as readline from 'readline';
 
 // npx ts-node --files ./scripts/DelegateVote.ts CONTRACT_ADDRESS
-// https://sepolia.etherscan.io/tx/0x40574c6c05ad9f418e35e72aa062922c3b571448a057c2af3f832a9d15e7f4ad
-
+// https://sepolia.etherscan.io/tx/0xbe3171ddb9412c927bba46faafef59c66389369a1724a9192c9696c2efa5e44c
 dotenv.config();
 
 const providerApiKey = process.env.ALCHEMY_API_KEY || "";
@@ -65,10 +64,6 @@ async function main() {
     console.log("Waiting for confirmations...");
     const receipt = await publicClient.waitForTransactionReceipt({ hash });
     console.log("Transaction confirmed");
-    console.log("Ballot contract deployed to:", receipt.contractAddress);
-    if (!receipt.contractAddress) {
-      console.log("Contract deployment failed");
-    }
   } else {
     console.log("Operation cancelled");
   }

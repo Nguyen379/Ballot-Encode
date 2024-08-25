@@ -46,7 +46,7 @@ contract Ballot {
 		}
 
 		Voter storage delegate_ = voters[to];
-		require(delegate_.weight >= 1);
+		require(delegate_.weight >= 1, "Delegate weight = 0");
 
 		sender.voted = true;
 		sender.delegate = to;

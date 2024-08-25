@@ -7,7 +7,7 @@ import { abi, bytecode } from "../artifacts/contracts/Ballot.sol/Ballot.json";
 import { toHex, hexToString, parseEther } from "viem";
 import * as readline from 'readline';
 
-// npx ts-node --files ./scripts/GiveRightToVote.ts CONTRACT ADDRESS
+// npx ts-node --files ./scripts/GiveRightToVote.ts CONTRACT_ADDRESS
 // https://sepolia.etherscan.io/tx/0x2b44e8f05d1d8364123e4db8d9f9b6692950ea6722cee9fb991cdf782a63b787
 dotenv.config();
 
@@ -65,10 +65,6 @@ async function main() {
     console.log("Waiting for confirmations...");
     const receipt = await publicClient.waitForTransactionReceipt({ hash });
     console.log("Transaction confirmed");
-    console.log("Ballot contract deployed to:", receipt.contractAddress);
-    if (!receipt.contractAddress) {
-      console.log("Contract deployment failed");
-    }
   } else {
     console.log("Operation cancelled");
   }
